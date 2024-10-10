@@ -1,4 +1,4 @@
-!/usr/bin/env python3
+#!/usr/bin/env python3
 x = int(input('Enter the first number:'))
 y = int(input('Enter the second number:'))
 print(x,'X', y , ' =',x * y)
