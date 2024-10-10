@@ -37,27 +37,32 @@ def is_under_attack(board, king_row, king_col, size):
     # Check for Rook (R) and Queen (Q) in straight lines
     for d in [-1, 1]:  # Up and down
         for row in range(king_row + d, size if d == 1 else -1, d):
-            if board[row][king_col] == 'R' or board[row][king_col] == 'Q':
+            piece = board[row][king_col]
+            if piece == 'R' or piece == 'Q':
                 return True
-            if board[row][king_col] != '.':
+            if piece != '.':
                 break  # Stop if there's any piece
     
     for d in [-1, 1]:  # Left and right
         for col in range(king_col + d, size if d == 1 else -1, d):
-            if board[king_row][col] == 'R' or board[king_row][col] == 'Q':
+            piece = board[king_row][col]
+            if piece == 'R' or piece == 'Q':
                 return True
-            if board[king_row][col] != '.':
+            if piece != '.':
                 break
     
-    # Check for Bishop (B) and Queen (Q) in diagonal lines
+    # Check for Bishop (B) and Queen (Q) in diagonal lines with a maximum range of 3
     for dr, dc in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
-        row, col = king_row + dr, king_col + dc
-        while 0 <= row < size and 0 <= col < size:
-            if board[row][col] == 'B' or board[row][col] == 'Q':
-                return True
-            if board[row][col] != '.':
-                break  # Stop if there's any piece
-            row += dr
-            col += dc
+        for distance in range(1, 4):  # Limit to 3 squares
+            row = king_row + dr * distance
+            col = king_col + dc * distance
+            if 0 <= row < size and 0 <= col < size:
+                piece = board[row][col]
+                if piece == 'B' or piece == 'Q':
+                    return True
+                if piece != '.':
+                    break  # Stop if there's any piece
+            else:
+                break  # Out of board boundaries
     
-    return False
+    return False  
